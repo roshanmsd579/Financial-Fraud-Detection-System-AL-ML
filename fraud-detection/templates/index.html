@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FraudShield AI — Financial Fraud Detection</title>
+    <meta name="description" content="AI-Powered Real-Time Financial Fraud Detection Dashboard with Machine Learning Risk Scoring">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-icon">
+                <i class="fas fa-shield-halved"></i>
+            </div>
+            <span class="logo-text">FraudShield<span class="logo-ai">AI</span></span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-section="dashboard" id="nav-dashboard">
+                <i class="fas fa-chart-pie"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="nav-item" data-section="transactions" id="nav-transactions">
+                <i class="fas fa-exchange-alt"></i>
+                <span>Transactions</span>
+            </a>
+            <a href="#" class="nav-item" data-section="alerts" id="nav-alerts">
+                <i class="fas fa-bell"></i>
+                <span>Alerts</span>
+                <span class="nav-badge" id="alerts-badge">0</span>
+            </a>
+            <a href="#" class="nav-item" data-section="analytics" id="nav-analytics">
+                <i class="fas fa-chart-bar"></i>
+                <span>Analytics</span>
+            </a>
+            <a href="#" class="nav-item" data-section="model" id="nav-model">
+                <i class="fas fa-brain"></i>
+                <span>AI Model</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="system-status">
+                <div class="status-dot pulse"></div>
+                <span>System Active</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="topbar">
+            <button class="menu-toggle" id="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <div class="topbar-search">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search transactions, alerts..." id="search-input">
+            </div>
+
+            <div class="topbar-actions">
+                <div class="live-indicator">
+                    <div class="live-dot"></div>
+                    <span>LIVE</span>
+                </div>
+                <button class="topbar-btn" id="notif-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="topbar-badge" id="topbar-badge">0</span>
+                </button>
+                <div class="user-avatar" id="user-avatar">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Section -->
+        <section class="content-section active" id="section-dashboard">
+            <div class="section-header">
+                <h1>Fraud Detection Dashboard</h1>
+                <p class="section-subtitle">Real-time AI-powered transaction monitoring</p>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="kpi-grid">
+                <div class="kpi-card" id="kpi-total">
+                    <div class="kpi-icon kpi-icon-blue">
+                        <i class="fas fa-receipt"></i>
+                    </div>
+                    <div class="kpi-info">
+                        <span class="kpi-label">Total Transactions</span>
+                        <span class="kpi-value" data-target="0" id="kpi-total-value">0</span>
+                    </div>
+                    <div class="kpi-trend up">
+                        <i class="fas fa-arrow-up"></i> <span>+12.5%</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card" id="kpi-flagged">
+                    <div class="kpi-icon kpi-icon-red">
+                        <i class="fas fa-flag"></i>
+                    </div>
+                    <div class="kpi-info">
+                        <span class="kpi-label">Flagged Transactions</span>
+                        <span class="kpi-value" id="kpi-flagged-value">0</span>
+                    </div>
+                    <div class="kpi-trend down">
+                        <i class="fas fa-arrow-down"></i> <span>-3.2%</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card" id="kpi-rate">
+                    <div class="kpi-icon kpi-icon-amber">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <div class="kpi-info">
+                        <span class="kpi-label">Fraud Rate</span>
+                        <span class="kpi-value" id="kpi-rate-value">0%</span>
+                    </div>
+                    <div class="kpi-trend down">
+                        <i class="fas fa-arrow-down"></i> <span>-1.1%</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card" id="kpi-accuracy">
+                    <div class="kpi-icon kpi-icon-green">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <div class="kpi-info">
+                        <span class="kpi-label">Model Accuracy</span>
+                        <span class="kpi-value" id="kpi-accuracy-value">0%</span>
+                    </div>
+                    <div class="kpi-trend up">
+                        <i class="fas fa-arrow-up"></i> <span>+0.8%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="charts-grid">
+                <div class="chart-card chart-card-large">
+                    <div class="chart-header">
+                        <h3>Transaction Volume & Risk Timeline</h3>
+                        <div class="chart-legend">
+                            <span class="legend-item"><span class="legend-dot" style="background:#00d4ff"></span> Transactions</span>
+                            <span class="legend-item"><span class="legend-dot" style="background:#ff006e"></span> Flagged</span>
+                        </div>
+                    </div>
+                    <canvas id="volumeChart"></canvas>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Risk Distribution</h3>
+                    </div>
+                    <canvas id="riskChart"></canvas>
+                    <div class="risk-legend" id="risk-legend"></div>
+                </div>
+            </div>
+
+            <!-- Live Feed + Alerts Row -->
+            <div class="bottom-grid">
+                <div class="feed-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-stream"></i> Live Transaction Feed</h3>
+                        <span class="live-badge"><span class="live-dot-small"></span> Updating</span>
+                    </div>
+                    <div class="table-wrapper" id="live-feed-wrapper">
+                        <table class="data-table" id="live-feed-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Time</th>
+                                    <th>Customer</th>
+                                    <th>Amount</th>
+                                    <th>Category</th>
+                                    <th>Location</th>
+                                    <th>Risk Score</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="live-feed-body">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="alerts-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Recent Alerts</h3>
+                        <span class="alert-count" id="alert-count">0 active</span>
+                    </div>
+                    <div class="alerts-list" id="alerts-list">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Transactions Section -->
+        <section class="content-section" id="section-transactions">
+            <div class="section-header">
+                <h1>All Transactions</h1>
+                <p class="section-subtitle">Complete transaction log with AI risk analysis</p>
+            </div>
+            <div class="feed-card full-width">
+                <div class="card-header">
+                    <h3><i class="fas fa-list"></i> Transaction History</h3>
+                    <div class="filter-controls">
+                        <select id="risk-filter" class="filter-select">
+                            <option value="all">All Risk Levels</option>
+                            <option value="critical">Critical</option>
+                            <option value="high">High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table class="data-table" id="all-txn-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Timestamp</th>
+                                <th>Customer</th>
+                                <th>Amount</th>
+                                <th>Type</th>
+                                <th>Category</th>
+                                <th>Location</th>
+                                <th>International</th>
+                                <th>Risk Score</th>
+                                <th>Risk Level</th>
+                            </tr>
+                        </thead>
+                        <tbody id="all-txn-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Alerts Section -->
+        <section class="content-section" id="section-alerts">
+            <div class="section-header">
+                <h1>Alert Management</h1>
+                <p class="section-subtitle">Review and resolve flagged transactions</p>
+            </div>
+            <div class="alerts-full-list" id="alerts-full-list">
+            </div>
+        </section>
+
+        <!-- Analytics Section -->
+        <section class="content-section" id="section-analytics">
+            <div class="section-header">
+                <h1>Analytics</h1>
+                <p class="section-subtitle">Fraud analytics by category and geography</p>
+            </div>
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Fraud by Category</h3>
+                    </div>
+                    <canvas id="categoryChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Transaction Amounts Distribution</h3>
+                    </div>
+                    <canvas id="amountChart"></canvas>
+                </div>
+            </div>
+            <div class="charts-grid" style="margin-top: 1.5rem;">
+                <div class="chart-card chart-card-large">
+                    <div class="chart-header">
+                        <h3>Hourly Risk Pattern</h3>
+                    </div>
+                    <canvas id="hourlyChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Geographic Distribution</h3>
+                    </div>
+                    <canvas id="geoChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Model Section -->
+        <section class="content-section" id="section-model">
+            <div class="section-header">
+                <h1>AI Model Performance</h1>
+                <p class="section-subtitle">Random Forest classifier metrics & prediction testing</p>
+            </div>
+
+            <div class="model-metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-ring metric-ring-blue">
+                        <svg viewBox="0 0 120 120">
+                            <circle cx="60" cy="60" r="50" class="ring-bg"/>
+                            <circle cx="60" cy="60" r="50" class="ring-fill" id="ring-accuracy"/>
+                        </svg>
+                        <span class="ring-value" id="metric-accuracy">0%</span>
+                    </div>
+                    <span class="metric-label">Accuracy</span>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-ring metric-ring-cyan">
+                        <svg viewBox="0 0 120 120">
+                            <circle cx="60" cy="60" r="50" class="ring-bg"/>
+                            <circle cx="60" cy="60" r="50" class="ring-fill" id="ring-precision"/>
+                        </svg>
+                        <span class="ring-value" id="metric-precision">0%</span>
+                    </div>
+                    <span class="metric-label">Precision</span>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-ring metric-ring-magenta">
+                        <svg viewBox="0 0 120 120">
+                            <circle cx="60" cy="60" r="50" class="ring-bg"/>
+                            <circle cx="60" cy="60" r="50" class="ring-fill" id="ring-recall"/>
+                        </svg>
+                        <span class="ring-value" id="metric-recall">0%</span>
+                    </div>
+                    <span class="metric-label">Recall</span>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-ring metric-ring-green">
+                        <svg viewBox="0 0 120 120">
+                            <circle cx="60" cy="60" r="50" class="ring-bg"/>
+                            <circle cx="60" cy="60" r="50" class="ring-fill" id="ring-f1"/>
+                        </svg>
+                        <span class="ring-value" id="metric-f1">0%</span>
+                    </div>
+                    <span class="metric-label">F1 Score</span>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-ring metric-ring-amber">
+                        <svg viewBox="0 0 120 120">
+                            <circle cx="60" cy="60" r="50" class="ring-bg"/>
+                            <circle cx="60" cy="60" r="50" class="ring-fill" id="ring-auc"/>
+                        </svg>
+                        <span class="ring-value" id="metric-auc">0%</span>
+                    </div>
+                    <span class="metric-label">ROC AUC</span>
+                </div>
+            </div>
+
+            <!-- Predict Form -->
+            <div class="predict-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-search-dollar"></i> Test Prediction</h3>
+                </div>
+                <form id="predict-form" class="predict-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="pred-amount">Amount ($)</label>
+                            <input type="number" id="pred-amount" value="500" step="0.01" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="pred-category">Category</label>
+                            <select id="pred-category">
+                                <option value="grocery">Grocery</option>
+                                <option value="electronics">Electronics</option>
+                                <option value="restaurant">Restaurant</option>
+                                <option value="online_shopping" selected>Online Shopping</option>
+                                <option value="travel">Travel</option>
+                                <option value="wire_transfer">Wire Transfer</option>
+                                <option value="cryptocurrency">Cryptocurrency</option>
+                                <option value="gambling">Gambling</option>
+                                <option value="atm_withdrawal">ATM Withdrawal</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="pred-country">Country</label>
+                            <select id="pred-country">
+                                <option value="USA">USA</option>
+                                <option value="UK">UK</option>
+                                <option value="Japan">Japan</option>
+                                <option value="India">India</option>
+                                <option value="Nigeria">Nigeria</option>
+                                <option value="Brazil">Brazil</option>
+                                <option value="Germany">Germany</option>
+                                <option value="Russia">Russia</option>
+                                <option value="China">China</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="pred-hour">Hour (0-23)</label>
+                            <input type="number" id="pred-hour" value="14" min="0" max="23">
+                        </div>
+                    </div>
+                    <button type="submit" class="predict-btn" id="predict-btn">
+                        <i class="fas fa-robot"></i> Analyze Transaction
+                    </button>
+                </form>
+                <div class="predict-result" id="predict-result" style="display:none;">
+                    <div class="result-score" id="result-score">0</div>
+                    <div class="result-details">
+                        <span class="result-level" id="result-level">—</span>
+                        <span class="result-action" id="result-action">—</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
